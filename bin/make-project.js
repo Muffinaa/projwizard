@@ -3,7 +3,7 @@ import { readdir } from "fs/promises";
 import { readFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { select } from "@inquirer/prompts";
+import { input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -24,6 +24,11 @@ async function loadTemplates() {
 async function main() {
   const templates = await loadTemplates();
 
+  const projectName = await input({
+    message: "What should the project be called?",
+    validate: (name) => (name ? true : "Project name cannot be empty"),
+  });
+
   const templateId = await select({
     message: "Which template do you want to scaffold?",
     choices: templates.map((t) => ({
@@ -34,7 +39,7 @@ async function main() {
   });
 
   const chosen = templates.find((t) => t.id === templateId);
-  const dest = path.join(process.cwd(), chosen.id);
+  const dest = path.join(process.cwd(), projectName);
 
   await fsExtra.copy(path.join(chosen.path, "files"), dest);
   console.log(`✓ Generated ${chosen.name} in ./${chosen.id}`);
