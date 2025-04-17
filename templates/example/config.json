@@ -1,0 +1,23 @@
+{
+  "name": "example",
+  "tags": ["example"],
+  "description": "Example template",
+  "templateDeps": [],
+  "options": {
+    "exampleBoolean": {
+      "type": "boolean",
+      "description": "Example boolean field"
+    },
+    "exampleNumber": {
+      "type": "number",
+      "description": "Example number field",
+      "default": 5
+    },
+    "exampleInput": {
+      "type": "string",
+      "description": "Example text field",
+      "default": "example"
+    }
+  },
+  "postInstall": ["echo Have fun with making templates"]
+}

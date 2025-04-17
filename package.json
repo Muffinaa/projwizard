@@ -1,12 +1,25 @@
 {
-  "name": "project-wizard",
+  "name": "projwizard",
   "version": "1.0.0",
   "description": "Create a project structure using community made templates.",
   "license": "ISC",
   "author": "Muffinaa",
   "type": "module",
+  "files": [
+    "bin",
+    "templates"
+  ],
+  "keywords": [
+    "scaffold",
+    "template",
+    "npx",
+    "cli"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "bin": {
-    "create-myproject": "./bin/project-wizard.js"
+    "project-wizard": "bin/project-wizard.js"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.4.1",

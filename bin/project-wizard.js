@@ -35,7 +35,7 @@ async function initGitRepo(destDir) {
 
     console.log("✓ Git repository initialized.");
   } catch (err) {
-    console.error("⚠️ Failed to initialize git:", err.message);
+    console.error("! Failed to initialize git:", err.message);
   }
 }
 
@@ -52,7 +52,7 @@ async function main() {
     choices: templates.map((t) => ({
       title: t.name,
       value: t.id,
-      description: `\n${t.name}\n\nTags: ${t.tags?.join(", ")}\n\n${t.description}`,
+      description: `${t.name}\nTags: ${t.tags?.join(", ")}\n${t.description}`,
     })),
   });
 
@@ -93,9 +93,9 @@ async function main() {
     "index.js",
   );
 
-  if (chosen.templateDeps) {
+  if (chosen.templateDeps?.length) {
     const deps = chosen.templateDeps.join(" ");
-    console.log(`📦 Installing template runtime deps: ${deps}`);
+    console.log(`+ Installing template runtime deps: ${deps}`);
     await execAsync(`npm install ${deps}`, { cwd: rootDir });
   }
 
@@ -108,7 +108,7 @@ async function main() {
 
   if (chosen.postInstall) {
     for (const cmd of chosen.postInstall) {
-      console.log(`⚙️  Running: ${cmd}`);
+      console.log(`- Running: ${cmd}`);
       await execAsync(cmd, { cwd: dest });
     }
   }
