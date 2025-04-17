@@ -1,0 +1,11 @@
+{
+  "name": "Vanilla html config",
+  "tags": ["web"],
+  "description": "Boilerplate for a html website",
+  "customOptions": {
+    "useScss": {
+      "type": "boolean",
+      "description": "Include SCSS for styling"
+    }
+  }
+}
