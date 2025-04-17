@@ -1,12 +1,12 @@
 {
-  "name": "make-project",
+  "name": "project-wizard",
   "version": "1.0.0",
   "description": "Create a project structure using community made templates.",
   "license": "ISC",
-  "author": "Muffina",
+  "author": "Muffinaa",
   "type": "module",
   "bin": {
-    "create-myproject": "./bin/make-project.js"
+    "create-myproject": "./bin/project-wizard.js"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.4.1",

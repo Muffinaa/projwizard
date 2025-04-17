@@ -13,6 +13,7 @@ const execAsync = promisify(exec);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const rootDir = path.resolve(__dirname);
 
 async function loadTemplates() {
   const base = path.join(__dirname, "../templates");
@@ -58,10 +59,8 @@ async function main() {
   const chosen = templates.find((t) => t.id === templateId);
 
   let configOptions = {};
-
   for (const [key, opt] of Object.entries(chosen.options)) {
     const message = `${opt.description || key}`;
-
     let value;
     switch (opt.type) {
       case "boolean":
@@ -77,14 +76,10 @@ async function main() {
         console.warn(`Unknown type for ${key}, skipping`);
         continue;
     }
-
     configOptions[key] = value;
   }
 
-  console.log(configOptions);
-
   const dest = path.join(process.cwd(), projectName);
-
   await fsExtra.copy(path.join(chosen.path, "files"), dest);
 
   const createRepo = await confirm({
@@ -97,6 +92,13 @@ async function main() {
     path.join(__dirname, `../templates/${chosen.name}`),
     "index.js",
   );
+
+  if (chosen.templateDeps) {
+    const deps = chosen.templateDeps.join(" ");
+    console.log(`📦 Installing template runtime deps: ${deps}`);
+    await execAsync(`npm install ${deps}`, { cwd: rootDir });
+  }
+
   if (fs.existsSync(logicPath)) {
     const run = (await import(logicPath)).default;
     if (typeof run === "function") {
