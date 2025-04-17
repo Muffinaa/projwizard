@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import fs from "fs-extra";
 import { confirm, input, number, select } from "@inquirer/prompts";
 import { exec } from "child_process";
 import { readFileSync } from "fs";
@@ -85,8 +86,32 @@ async function main() {
   const dest = path.join(process.cwd(), projectName);
 
   await fsExtra.copy(path.join(chosen.path, "files"), dest);
-  console.log(`✓ Generated ${chosen.name} in ./${projectName}`);
-  await initGitRepo(dest);
+
+  const createRepo = await confirm({
+    message: "Initialize a git repository?",
+    default: true,
+  });
+  if (createRepo) initGitRepo(dest);
+
+  const logicPath = path.join(
+    path.join(__dirname, `../templates/${chosen.name}`),
+    "index.js",
+  );
+  if (fs.existsSync(logicPath)) {
+    const run = (await import(logicPath)).default;
+    if (typeof run === "function") {
+      await run({ projectDir: dest, configOptions });
+    }
+  }
+
+  if (chosen.postInstall) {
+    for (const cmd of chosen.postInstall) {
+      console.log(`⚙️  Running: ${cmd}`);
+      await execAsync(cmd, { cwd: dest });
+    }
+  }
+
+  console.log(`✔ Done! Project created at ${projectName}`);
 }
 
 main().catch((err) => {
