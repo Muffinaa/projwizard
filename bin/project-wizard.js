@@ -8,7 +8,6 @@ import { readdir } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 import { promisify } from "util";
-
 const execAsync = promisify(exec);
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,23 +16,25 @@ const rootDir = path.resolve(__dirname);
 
 async function loadTemplates() {
   const base = path.join(__dirname, "../templates");
-  const dirs = await readdir(base, { withFileTypes: true });
-  return dirs
+  return (await readdir(base, { withFileTypes: true }))
     .filter((d) => d.isDirectory())
     .map((d) => {
       const cfgPath = path.join(base, d.name, "config.json");
-      const cfg = JSON.parse(readFileSync(cfgPath, "utf8"));
-      return { id: d.name, path: path.join(base, d.name), ...cfg };
+      return {
+        id: d.name,
+        path: path.join(base, d.name),
+        ...JSON.parse(readFileSync(cfgPath, "utf8")),
+      };
     });
 }
 
 async function initGitRepo(destDir) {
   try {
-    await execAsync("git init", { cwd: destDir });
-    await execAsync("git add .", { cwd: destDir });
-    await execAsync('git commit -m "Initial commit"', { cwd: destDir });
+    await execAsync("git init && git add . && git commit -m 'Initial commit'", {
+      cwd: destDir,
+    });
 
-    console.log("✓ Git repository initialized.");
+    console.log("# Git repository initialized.");
   } catch (err) {
     console.error("! Failed to initialize git:", err.message);
   }
@@ -59,34 +60,35 @@ async function main() {
   const chosen = templates.find((t) => t.id === templateId);
 
   let configOptions = {};
+
+  const optionsTypes = {
+    boolean: confirm,
+    number: number,
+    string: input,
+  };
+
   for (const [key, opt] of Object.entries(chosen.options)) {
     const message = `${opt.description || key}`;
-    let value;
-    switch (opt.type) {
-      case "boolean":
-        value = await confirm({ message, default: opt.default });
-        break;
-      case "number":
-        value = await number({ message, default: opt.default });
-        break;
-      case "string":
-        value = await input({ message, default: opt.default });
-        break;
-      default:
-        console.warn(`Unknown type for ${key}, skipping`);
-        continue;
+    if (!(opt.type in optionsTypes)) {
+      console.warn(`Unknown type for ${key}, skipping`);
+      continue;
     }
-    configOptions[key] = value;
+    configOptions[key] = await optionsTypes[opt.type]({
+      message,
+      default: opt.default,
+    });
   }
 
   const dest = path.join(process.cwd(), projectName);
   await fsExtra.copy(path.join(chosen.path, "files"), dest);
 
-  const createRepo = await confirm({
-    message: "Initialize a git repository?",
-    default: true,
-  });
-  if (createRepo) initGitRepo(dest);
+  if (
+    await confirm({
+      message: "Initialize a git repository?",
+      default: true,
+    })
+  )
+    initGitRepo(dest);
 
   const logicPath = path.join(
     path.join(__dirname, `../templates/${chosen.name}`),
@@ -113,10 +115,12 @@ async function main() {
     }
   }
 
-  console.log(`✔ Done! Project created at ${projectName}`);
+  console.log(`# Done! Project created at ${projectName}`);
 }
 
-main().catch((err) => {
-  console.error(err);
+try {
+  await main();
+} catch (e) {
+  console.error(e);
   process.exit(1);
-});
+}
