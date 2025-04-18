@@ -92,8 +92,6 @@ async function main() {
 
   const logicPath = path.join(chosen.path, "index.js");
 
-  console.log(logicPath);
-
   if (chosen.templateDeps?.length) {
     const deps = chosen.templateDeps.join(" ");
     console.log(`+ Installing template runtime deps: ${deps}`);
