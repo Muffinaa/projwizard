@@ -1,6 +1,7 @@
 # 🧙‍♂️ projwizard
 
 [![npm version](https://img.shields.io/npm/v/projwizard?color=crimson&style=flat-square)](https://www.npmjs.com/package/projwizard)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/Muffinaa/projwizard?style=flat-square)](https://github.com/Muffinaa/projwizard/stargazers)
 [![GitHub Issues](https://img.shields.io/github/issues/Muffinaa/projwizard?style=flat-square)](https://github.com/Muffinaa/projwizard/issues)
 

@@ -1,8 +1,8 @@
 {
   "name": "projwizard",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Create a project structure using community made templates.",
-  "license": "ISC",
+  "license": "MIT",
   "author": "Muffinaa",
   "type": "module",
   "files": [
