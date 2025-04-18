@@ -90,10 +90,7 @@ async function main() {
   )
     initGitRepo(dest);
 
-  const logicPath = path.join(
-    path.join(__dirname, `../templates/${chosen.name}`),
-    "index.js",
-  );
+  const logicPath = path.join(chosen.path, "index.js");
 
   if (chosen.templateDeps?.length) {
     const deps = chosen.templateDeps.join(" ");
