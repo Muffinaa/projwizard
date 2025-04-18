@@ -3,7 +3,6 @@ import fs from "fs-extra";
 import { confirm, input, number, select } from "@inquirer/prompts";
 import { exec } from "child_process";
 import { readFileSync } from "fs";
-import fsExtra from "fs-extra";
 import { readdir } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -80,7 +79,7 @@ async function main() {
   }
 
   const dest = path.join(process.cwd(), projectName);
-  await fsExtra.copy(path.join(chosen.path, "files"), dest);
+  await fs.copy(path.join(chosen.path, "files"), dest);
 
   if (
     await confirm({
@@ -88,7 +87,7 @@ async function main() {
       default: true,
     })
   )
-    initGitRepo(dest);
+    await initGitRepo(dest);
 
   const logicPath = path.join(chosen.path, "index.js");
 
