@@ -55,6 +55,7 @@ This is the core of your template — it defines how the wizard presents your te
   "tags": ["demo"],
   "author": "Muffinaa",
   "description": "A basic example template",
+  "templateRepoLink": "https://github.com/Muffinaa/projwizard",
   "templateDeps": [],
   "postInstall": ["echo Done!"],
   "options": {
@@ -81,8 +82,12 @@ This is the core of your template — it defines how the wizard presents your te
 - **`name`** – Display name shown in the CLI
 - **`description`** – What your template does
 - **`tags`** – Used for filtering templates
-- **`templateDeps`** – Modules to install _before_ running custom logic (optional)
-- **`postInstall`** – Shell commands to run _after_ copying (optional)
+- **`templateRepoLink`** - Git repository of the repo
+
+Optional fields:
+
+- **`templateDeps`** – Modules to install _before_ running custom logic
+- **`postInstall`** – Shell commands to run _after_ copying
 - **`options`** – Custom prompts (boolean, string, number)
 
 ### ⚙️ `index.js` – Optional Custom Logic

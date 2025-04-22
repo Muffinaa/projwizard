@@ -2,6 +2,7 @@
   "name": "example",
   "tags": ["example"],
   "description": "Example template",
+  "templateRepoLink": "https://github.com/Muffinaa/projwizard",
   "templateDeps": [],
   "options": {
     "exampleBoolean": {
@@ -19,5 +20,5 @@
       "default": "example"
     }
   },
-  "postInstall": ["echo Have fun with making templates"]
+  "postInstall": ["echo Have fun with making templates > hello.txt"]
 }

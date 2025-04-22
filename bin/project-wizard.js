@@ -48,7 +48,7 @@ async function main() {
   });
 
   const templateId = await select({
-    message: "Which template do you want to scaffold?",
+    message: "What template do you want to use?",
     choices: templates.map((t) => ({
       title: t.name,
       value: t.id,
@@ -79,6 +79,15 @@ async function main() {
   }
 
   const dest = path.join(process.cwd(), projectName);
+
+  // Clone the template if needed
+  if (chosen.templateRepoLink) {
+    console.log(`+ Cloning the template repository: ${chosen.templateRepoLink}`);
+    await execAsync(`git clone ${chosen.templateRepoLink} ${dest} --depth 1`, { cwd: rootDir });
+    await fs.remove(path.join(dest, ".git"))
+  }
+
+  // Clone additional files to project dir
   await fs.copy(path.join(chosen.path, "files"), dest);
 
   if (
