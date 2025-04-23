@@ -5,6 +5,10 @@
   "license": "MIT",
   "author": "Muffinaa",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Muffinaa/projwizard"
+  },
   "files": [
     "bin",
     "templates"
